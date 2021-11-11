@@ -13,8 +13,10 @@
 
       <v-text-field
         :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-        :rules="[rules.required]"
+        :rules="[rules.required, rules.min]"
         :type="show ? 'text' : 'password'"
+        hint="At least 8 characters"
+        v-model="password"
         name="input-10-2"
         label="Password"
         class="input-group--focused text__input"
@@ -25,7 +27,7 @@
       <v-btn
         class="ma-2 submit"
         :loading="loading"
-        :disabled="loading"
+        :disabled="!username && !password || loading"
         color="primary"
         @click="loader = 'loading'"
       >
@@ -52,6 +54,7 @@ export default {
             v => !!v || 'E-mail is required',
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
           ],
+          min:  v => v.length >= 8 || 'Min 8 characters',
       },
     }
   },
