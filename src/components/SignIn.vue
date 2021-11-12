@@ -2,6 +2,7 @@
   <div class="form__wrapper">
     <h1 class="title"><strong>Simple Project |</strong> Sign In</h1>
     <v-form ref="form"  v-model="valid" lazy-validation class="form">
+
       <v-text-field
         class="text__input"
         append-icon="mdi-email"
@@ -24,15 +25,25 @@
         required
       ></v-text-field>
 
-      <v-btn
-        class="ma-2 submit"
-        :loading="loading"
-        :disabled="!username && !password || loading"
-        color="primary"
-        @click="loader = 'loading'"
-      >
-        Sign In
-      </v-btn>
+      <div class="links">
+        <router-link class="sign-up" to='/sign_up'>
+          Sign up
+        </router-link>
+        
+          <v-btn
+            class="ma-2 submit"
+            :loading="loading"
+            :disabled="!email || password.length < 8 || loading"
+            color="primary"
+            @click="loader = 'loading'"
+          >
+            <router-link to='/home' class="link">
+              Sign In
+            </router-link>  
+          </v-btn>
+        
+      </div>
+      
     </v-form>
   </div>
 </template>
@@ -42,7 +53,7 @@ export default {
   name: 'Form',
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
       loader: null,
       loading: false,
@@ -91,12 +102,32 @@ export default {
   }
   .form {
     position: relative;
-    padding: 36px 16px 72px;
+    padding: 36px 16px 20px;
 
-    .submit {
-      position: absolute;
-      right: 24px;
-      bottom: 14px;
+    .links {
+      margin-top: 16px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .sign-up {
+        color: #757575;
+        letter-spacing: 1px;
+      }
+      .submit {
+        
+        .link {
+          text-decoration: none;
+          color: #fff;
+        }
+      }
+      .submit:disabled {
+        .link {
+          text-decoration: none;
+          color: inherit;
+        }
+      }
     }
   }
 }
