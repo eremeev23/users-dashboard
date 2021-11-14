@@ -31,15 +31,14 @@
         </router-link>
         
           <v-btn
-            class="ma-2 submit"
+            class=" submit"
             :loading="loading"
             :disabled="!email || password.length < 8 || loading"
             color="primary"
-            @click="loader = 'loading'"
+            @click.prevent="loader = 'loading'"
+            to='/dashboard'
           >
-            <router-link to='/home' class="link">
-              Sign In
-            </router-link>  
+            Sign In
           </v-btn>
         
       </div>
@@ -49,6 +48,8 @@
 </template>
 
 <script>
+// import gql from 'graphql-tag'
+
 export default {
   name: 'Form',
   data() {
@@ -68,6 +69,9 @@ export default {
           min:  v => v.length >= 8 || 'Min 8 characters',
       },
     }
+  },
+  apollo: {
+    
   },
   methods: {
     submit: function(e) {
@@ -114,19 +118,6 @@ export default {
       .sign-up {
         color: #757575;
         letter-spacing: 1px;
-      }
-      .submit {
-        
-        .link {
-          text-decoration: none;
-          color: #fff;
-        }
-      }
-      .submit:disabled {
-        .link {
-          text-decoration: none;
-          color: inherit;
-        }
       }
     }
   }

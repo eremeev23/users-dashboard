@@ -1,7 +1,7 @@
 <template>
   <div class="form__wrapper">
     <h1 class="title"><strong>Simple Project |</strong> Sign Up</h1>
-    <v-form ref="form"  v-model="valid" lazy-validation class="form" @submit="senForm">
+    <v-form ref="form" lazy-validation class="form" @submit="register">
       <v-text-field
         class="text__input"
         append-icon="mdi-account"
@@ -25,7 +25,6 @@
         :type="show ? 'text' : 'password'"
         hint="At least 8 characters"
         v-model="password"
-        :counter="max"
         name="input-10-2"
         label="Password"
         class="input-group--focused text__input"
@@ -34,15 +33,15 @@
       ></v-text-field>
 
       <v-text-field
-        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-        :rules="[rules.required, rules.min]"
-        :type="show ? 'text' : 'password'"
-        hint="At least 8 characters"
+        :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+        :rules="[rules.required, rules.confirm]"
+        :type="show2 ? 'text' : 'password'"
+        
         v-model="confirm"
         name="input-10-2"
-        label="Password"
+        label="Confirm Password"
         class="input-group--focused text__input"
-        @click:append="show = !show"
+        @click:append="show2 = !show2"
         required
       ></v-text-field>
 
@@ -50,22 +49,26 @@
         <router-link class="sign-in" to='/'>
           Sign in
         </router-link>
-
+        
         <v-btn
           class="ma-2 submit"
           :loading="loading"
-          :disabled="!email || !name || confirm.length <= 8 || password.length <= 8 || loading"
+          :disabled="!email || !name || confirm.length < 8 || password.length < 8 || password !== confirm || loading"
           color="primary"
           @click="loader = 'loading'"
+          to='/dashboard'
         >
           Sign up
         </v-btn>
+        
       </div>
     </v-form>
   </div>
 </template>
 
 <script>
+// import gql from 'graphql-tag'
+
 export default {
   name: 'Form',
   data() {
@@ -74,17 +77,30 @@ export default {
       email: '',
       password: '',
       confirm: '',
+      loader: null,
       show: false,
+      show2: false,
       valid: false,
       rules: {
-          required: value => !!value || 'Required.',
+          required: value => !!value || 'Required',
           min: v => v.length >= 8 || 'Min 8 characters',
           name: v => v.length >= 1 || 'Type your full name',
+          confirm: v => v === this.password || "It doesn't confirm",
           emailRules: [
             v => !!v || 'Type your e-mail',
             v => /.+@.+\..+/.test(v) || 'Type your e-mail',
           ],
       },
+    }
+  },
+
+  methods: {
+    register: () => {
+      // const email = this.email;
+      // const password = this.password;
+
+      this.$apollo.mutate({
+      })
     }
   }
 }
@@ -118,6 +134,20 @@ export default {
       .sign-in {
         color: #757575;
         letter-spacing: 1px;
+      }
+
+      .submit {
+        
+        .link {
+          text-decoration: none;
+          color: #fff;
+        }
+      }
+      .submit:disabled {
+        .link {
+          text-decoration: none;
+          color: inherit;
+        }
       }
     }
   }
